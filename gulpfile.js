@@ -2,7 +2,7 @@
 const fsio        = require('fs');
 const gulp        = require('gulp');
 const del         = require('del');
-const gulp_sass   = require('gulp-sass');
+const gulp_sass   = require('gulp-sass')(require('sass'));
 const sass_glob   = require('gulp-sass-glob');
 const {series}    = require('gulp');
 const {watch}     = require('gulp');
@@ -107,11 +107,6 @@ function build_images()
 
 function build_js()
 {
-    //del( [ `${PATHs.DEST_SCRIPTS}*.js`, `!${PATHs.DEST_SCRIPTS}` ] );
-
-    gulp.src( [ `${PATHs.SRC_SCRIPTS}svgxuse.min.js` ] )
-        .pipe( gulp.dest( PATHs.DEST_SCRIPTS ) );
-    
     return browserify({ entries: [ `${PATHs.SRC_SCRIPTS}main.js` ] })
         .transform(babelify.configure({ presets : ["@babel/preset-env"] }))
         .bundle()
@@ -176,11 +171,8 @@ function gulp_server()
 {
     gulp.src( `./${PATHs.DEST_HTML}` )
         .pipe(webserver({
-            livereload: false,
-            //directoryListing: true,
+            livereload: true,
             open: true,
-            //fallback: `index.html`
-            //path: `/${PATHs.DEST_HTML}index.html`
         }));
 
 } // gulp_server
